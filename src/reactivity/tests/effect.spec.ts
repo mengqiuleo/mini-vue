@@ -1,3 +1,6 @@
+import { effect } from "../effect"
+import { reactive } from "../reactivity"
+
 describe('effect', () => {
   it('happy path', () => {
     const user = reactive({
@@ -14,3 +17,4 @@ describe('effect', () => {
     expect(nextAge).toBe(12)
   })
 })
+
