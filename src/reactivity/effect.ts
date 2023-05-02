@@ -1,9 +1,12 @@
 import { extend } from "../shared"
 
+let activeEffect
+let shouldTrack
+
 class ReactiveEffect{ //* 一种封装的思想
   private _fn: any
   deps = []
-  active = true
+  active = true //控制stop是否已经清理过, true表示还没clean
   onStop?: () => void
   constructor(fn, public scheduler?){
     this._fn = fn
@@ -12,7 +15,15 @@ class ReactiveEffect{ //* 一种封装的思想
 
   run(){
     activeEffect = this
-    return this._fn()
+    if(!this.active){ //false:已经clean过了，以后不用追踪
+      return this._fn()
+    }
+
+    shouldTrack = true
+    activeEffect = this
+    const result = this._fn()
+    shouldTrack = false
+    return result
   }
 
   stop(){
@@ -31,10 +42,16 @@ function cleanupEffect(effect){
   effect.deps.forEach((dep: any) => { //dep代表某个key的所有effect，是一个set
     dep.delete(effect) //让每一个set删除当前effect
   })
+  effect.deps.length = 0
 }
 
 const targetMap = new Map() //所有对象，映射
 export function track(target, key){
+  // if(!activeEffect) return
+  // if(!shouldTrack) return
+  //对上面代码优化
+  if(!isTracking()) return
+
   // 每一个 target 的每一个属性都要存，容器 Set
   // target -> key -> dep
   let depsMap = targetMap.get(target)
@@ -48,12 +65,15 @@ export function track(target, key){
     depsMap.set(key, dep)
   }
 
-  if(!activeEffect) return
-
+  //如果activeEffect已经在dep中了，不用再加了
+  if(dep.has(activeEffect)) return
   dep.add(activeEffect) //将当前的更新函数保存，如何拿到当前effect中的fn, 利用全局变量
   activeEffect.deps.push(dep)
 }
 
+function isTracking(){
+  return shouldTrack && activeEffect !== undefined
+}
 
 export function trigger(target, key){
   let depsMap = targetMap.get(target)
@@ -69,7 +89,6 @@ export function trigger(target, key){
 }
 
 
-let activeEffect
 export function effect(fn, options:any = {}){
   const scheduler = options.scheduler
   const _effect = new ReactiveEffect(fn, scheduler)

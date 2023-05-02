@@ -68,7 +68,8 @@ describe('effect', () => {
     obj.prop = 2
     expect(dummy).toBe(2)
     stop(runner) //stop runner 后，
-    obj.prop = 3 // obj.prop 是成功的
+    // obj.prop = 3 // obj.prop 是成功的,这个只会涉及到set操作
+    obj.prop++ //变成++，ut过不去，因为这里涉及到get和set操作，set里面的stop清理掉effect，当++，get时重新收集依赖，又把effect加进去
     expect(dummy).toBe(2) //但是赋值给 dummy 是不成功的
     expect(obj.prop).toBe(3)
     /**
