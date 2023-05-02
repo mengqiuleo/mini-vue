@@ -1,4 +1,4 @@
-import { mutableHandlers, readonlyHandlers } from './baseHandlers';
+import { mutableHandlers, readonlyHandlers, shallowReadonlyHandlers } from './baseHandlers';
 
 export const enum ReactiveFlags {
   IS_REACTIVE = "__v_isReactive",
@@ -14,12 +14,20 @@ export function readonly(raw){
   return createActiveObject(raw, readonlyHandlers)
 }
 
+export function shallowReadonly(raw){
+  return createActiveObject(raw, shallowReadonlyHandlers)
+}
+
 export function isReactive(value){ //调用它的set来判断
   return !!value[ReactiveFlags.IS_REACTIVE] //转换成布尔值，如果是普通值，必然不会调用get，那么调用这个属性返回undefined，那直接把undefined转成Boolean
 }
 
 export function isReadonly(value){
   return !!value[ReactiveFlags.IS_READONLY]
+}
+
+export function isProxy(value){
+  return isReactive(value) || isReadonly(value)
 }
 
 function createActiveObject(raw: any, baseHandlers){
