@@ -3,7 +3,7 @@ import { extend } from "../shared"
 let activeEffect
 let shouldTrack
 
-class ReactiveEffect{ //* 一种封装的思想
+export class ReactiveEffect{ //* 一种封装的思想
   private _fn: any
   deps = []
   active = true //控制stop是否已经清理过, true表示还没clean
