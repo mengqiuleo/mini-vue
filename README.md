@@ -10,3 +10,9 @@ yarn add --dev @babel/preset-typescript
   会自动匹配 reactive.spec.ts 文件
 
 - yarn test effect --watch 可调试
+
+
+## 打包 runtime-core
+yarn build 
+
+yarn build --watch 当文件发生变化后，自动打包
