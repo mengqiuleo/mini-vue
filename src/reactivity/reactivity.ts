@@ -1,4 +1,5 @@
 import { mutableHandlers, readonlyHandlers, shallowReadonlyHandlers } from './baseHandlers';
+import { isObject } from '../shared/index';
 
 export const enum ReactiveFlags {
   IS_REACTIVE = "__v_isReactive",
@@ -6,16 +7,16 @@ export const enum ReactiveFlags {
 }
 
 export function reactive(raw){
-  return createActiveObject(raw, mutableHandlers)
+  return createReactiveObject(raw, mutableHandlers)
 }
 
 export function readonly(raw){
   // 因为只读，所以不需要 trigger，同样不需要 track
-  return createActiveObject(raw, readonlyHandlers)
+  return createReactiveObject(raw, readonlyHandlers)
 }
 
 export function shallowReadonly(raw){
-  return createActiveObject(raw, shallowReadonlyHandlers)
+  return createReactiveObject(raw, shallowReadonlyHandlers)
 }
 
 export function isReactive(value){ //调用它的set来判断
@@ -30,6 +31,9 @@ export function isProxy(value){
   return isReactive(value) || isReadonly(value)
 }
 
-function createActiveObject(raw: any, baseHandlers){
-  return new Proxy(raw, baseHandlers)
+function createReactiveObject(target: any, baseHandlers){
+  if(!isObject(target)){
+    console.warn(`target ${target} 必须是一个对象`)
+  }
+  return new Proxy(target, baseHandlers)
 }
