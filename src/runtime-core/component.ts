@@ -3,14 +3,16 @@ import { PublicInstanceProxyHandlers } from './componentPublicInstance';
 import { shallowReadonly } from '../reactivity/reactivity';
 import { emit } from './componentEmit';
 import { initSlots } from './componentSlots';
-export function createComponentInstance(vnode){
+export function createComponentInstance(vnode, parent){
   const component = {
     vnode,
     type: vnode.type,
     setupState: {},
     props: {},
     emit: () => {},
-    slots: {}
+    slots: {},
+    provides: parent ? parent.provides : {},
+    parent
   }
   component.emit = emit.bind(null, component) as any
   return component
