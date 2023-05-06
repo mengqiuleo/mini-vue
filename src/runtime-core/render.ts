@@ -5,6 +5,7 @@ import { Fragment, Text } from "./vnode"
 import { createAppAPI } from './createApp';
 import { effect } from '../reactivity/effect';
 import { shouldUpdateComponent } from "./componentUpdateUtils";
+import { queueJobs } from "./scheduler";
 
 export function createRenderer(options){
   const { createElement, patchProp, insert,remove, setElementText } = options
@@ -337,6 +338,12 @@ export function createRenderer(options){
         patch(prevSubTree,subTree, container, instance, anchor)
       }
 
+    }, 
+    {
+      scheduler(){
+        console.log('update-scheduler')
+        queueJobs(instance.update)
+      }
     })
 
   }
