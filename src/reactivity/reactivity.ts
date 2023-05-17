@@ -19,7 +19,7 @@ export function shallowReadonly(raw){
   return createReactiveObject(raw, shallowReadonlyHandlers)
 }
 
-export function isReactive(value){ //调用它的set来判断
+export function isReactive(value){ //调用它的get来判断, 在get中我们会对这个特殊的key做单独的判断
   return !!value[ReactiveFlags.IS_REACTIVE] //转换成布尔值，如果是普通值，必然不会调用get，那么调用这个属性返回undefined，那直接把undefined转成Boolean
 }
 

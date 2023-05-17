@@ -14,6 +14,7 @@ describe('transform', () => {
     })
 
     const nodeText = ast.children[0].children[0]
+    console.log('transform.spec: ', nodeText)
     expect(nodeText.content).toBe('hi, mini-vue')
   })
 })

@@ -72,7 +72,7 @@ export function trackEffects(dep){
   //如果activeEffect已经在dep中了，不用再加了
   if(!dep.has(activeEffect)){
     dep.add(activeEffect) //将当前的更新函数保存，如何拿到当前effect中的fn, 利用全局变量
-    activeEffect.deps.push(dep)
+    activeEffect.deps.push(dep) //* 互相收集，当前effect收集它的 dep
   }
 }
 

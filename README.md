@@ -16,3 +16,7 @@ yarn add --dev @babel/preset-typescript
 yarn build 
 
 yarn build --watch 当文件发生变化后，自动打包
+
+
+## jest 快照测试
+yarn test codegen -u 更新快照内容
