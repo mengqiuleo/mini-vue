@@ -130,7 +130,8 @@ function advanceBy(context: any, length: number){
 
 function createRoot(children){
   return {
-    children
+    children,
+    type: NodeType.ROOT
   }
 }
 
