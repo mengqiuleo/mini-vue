@@ -3,6 +3,15 @@ import { ShapeFlags } from "../shared/ShapeFlags"
 export const Fragment = Symbol('Fragment')
 export const Text = Symbol('Text')
 
+interface VNode {
+  /* HTML 标签名、组件、异步组件或函数式组件。使用返回 null 的函数将渲染一个注释。此参数是必需的。 */
+  type: string | object | Function
+  /* 一个对象，与我们将在模板中使用的 attribute、prop 和事件相对应。可选。 */
+  props: object
+  /* 子代 VNode，使用 h 生成，或者使用字符串来获取“文本 VNode”，或带有插槽的对象。可选。 */
+  children: string | Array<VNode> | object
+}
+
 export function createVNode(type, props?, children?){
   const vnode = {
     type,
