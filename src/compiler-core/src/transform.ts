@@ -1,4 +1,5 @@
 import { NodeType } from "./ast"
+import { TO_DISPLAY_STRING } from './runtimeHelper'
 
 export function transform(root, options = {}){
   const context = createTransformContext(root, options)
@@ -41,7 +42,7 @@ function traverseNode(node: any, context: any){
 
   switch(node.type){
     case NodeType.INTERPOLATION:
-      context.helper('toDisplayString')
+      context.helper(TO_DISPLAY_STRING)
       break
     case NodeType.ROOT:
     case NodeType.ELEMENT:

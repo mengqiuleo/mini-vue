@@ -1,6 +1,7 @@
 // https://template-explorer.vuejs.org/#eyJzcmMiOiJoaSIsIm9wdGlvbnMiOnt9fQ==
 
 import { NodeType } from "./ast"
+import { CREATE_ELEMENT_VNODE, TO_DISPLAY_STRING, helperMapName } from './runtimeHelper';
 
 export function generate(ast){
   const context = createCodegenContext()
@@ -8,7 +9,7 @@ export function generate(ast){
 
   //处理导入函数
   const VueBinging = 'Vue'
-  const aliasHelper = (s) => `${s}:_${s}`
+  const aliasHelper = (s) => `${helperMapName[s]}:_${helperMapName[s]}`
   if(ast.helpers.length > 0){
     push(`const { ${ast.helpers.map(aliasHelper).join(', ')} } = ${VueBinging}`)
   }
@@ -46,6 +47,9 @@ function genNode(node:any, context){
     case NodeType.SIMPLE_EXPRESSION:
       genExpression(node, context)
       break
+    case NodeType.ELEMENT:
+      genElement(node, context)
+      break
     default:
       break
   }
@@ -56,14 +60,17 @@ function createCodegenContext(){
     code: '',
     push(source){
       context.code += source
+    },
+    helper(key) {
+      return `_${helperMapName[key]}`
     }
   }
   return context
 }
 
 function genInterpolation(node: any, context: any) {
-  const { push } = context
-  push(`_toDisplayString(`)
+  const { push, helper } = context
+  push(`${helper(TO_DISPLAY_STRING)}(`)
   genNode(node.content, context)
   push(')')
 }
@@ -71,4 +78,10 @@ function genInterpolation(node: any, context: any) {
 function genExpression(node: any, context: any) {
   const { push } = context
   push(`${node.content}`)
+}
+
+function  genElement(node:any, context: any) {
+  const { push, helper } = context
+  const { tag } = node
+  push(`${helper(CREATE_ELEMENT_VNODE)}('${tag}')`)
 }
