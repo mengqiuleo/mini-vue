@@ -64,7 +64,6 @@ function parseText(context: any){
   }
 
   const content = context.source.slice(0, endIndex)
-  console.log('content:------------', content)
   advanceBy(context, content.length)
   return {
     type: NodeType.TEXT,
