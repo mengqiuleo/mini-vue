@@ -320,7 +320,7 @@ export function createRenderer(options){
     instance.update = effect(() => {
       if(!instance.isMounted){
         const { proxy } = instance
-        const subTree = (instance.subTree = instance.render.call(proxy))
+        const subTree = (instance.subTree = instance.render.call(proxy, proxy))
         // 当这里的 subTree 为元素时，我终于明白了里面的props，children是哪来的，
         //当时我们执行 instance.render = Component.render，然后执行const subTree = instance.render()
         // 注意，这里是执行render函数，而render函数里面返回 h函数 的执行结果，可以去看下 h函数，它其实是传入了三个参数的，正好对应 type,props,children
@@ -336,7 +336,7 @@ export function createRenderer(options){
           updateComponentPreRender(instance, next)
         }
         const { proxy } = instance
-        const subTree = instance.render.call(proxy)
+        const subTree = instance.render.call(proxy, proxy)
         const prevSubTree = instance.subTree
 
         instance.subTree = subTree

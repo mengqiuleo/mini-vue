@@ -3,6 +3,10 @@ import { ShapeFlags } from "../shared/ShapeFlags"
 export const Fragment = Symbol('Fragment')
 export const Text = Symbol('Text')
 
+export {
+  createVNode as createElementVNode
+}
+
 interface VNode {
   /* HTML 标签名、组件、异步组件或函数式组件。使用返回 null 的函数将渲染一个注释。此参数是必需的。 */
   type: string | object | Function
