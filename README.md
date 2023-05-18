@@ -20,3 +20,6 @@ yarn build --watch 当文件发生变化后，自动打包
 
 ## jest 快照测试
 yarn test codegen -u 更新快照内容
+
+## html文件直接打开的跨域问题
+使用 live Server 打开
