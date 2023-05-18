@@ -10,7 +10,7 @@ export const App = {
           h('p', {}, 'header' + age),
           createTextVNode('mini-vue')
         ],
-        footer: () => h('p', {}, 'footer')
+        footer: () => [h('p', {}, 'footer1'), h('p', {}, 'footer2')]
       })
     // const foo = h(Foo, {}, h('p', {}, '456'))
     return h('div',{}, [app, foo])
