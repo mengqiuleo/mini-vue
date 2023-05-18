@@ -79,6 +79,7 @@ export function createRenderer(options){
     const { props } = vnode
     for(const key in props){
       const val = props[key]
+      // 在 runtime-dom 中
       // const isOn = (key: string) => /^on[A-Z]/.test(key)
       // if(isOn(key)){
       //   const event = key.slice(2).toLowerCase()
@@ -90,7 +91,7 @@ export function createRenderer(options){
 
     }
 
-    // container.append(el)
+    //* 往页面上插入真实节点 container.append(el)
     insert(el, container, anchor)
   }
 
@@ -110,9 +111,9 @@ export function createRenderer(options){
 
   function updateComponent(n1, n2){
     const instance = (n2.component = n1.component)
-    if(shouldUpdateComponent(n1, n2)){
+    if(shouldUpdateComponent(n1, n2)){ //是否需要更新
       instance.next = n2
-      instance.update()
+      instance.update() //调用它的effect函数，在 setupRenderEffect 中设置
     } else {
       n2.el = n1.el
       instance.vnode = n2
@@ -152,7 +153,7 @@ export function createRenderer(options){
         setElementText(container, '')
         mountChildren(c2, container, parentComponent, anchor)
       } else {
-        // array diff array
+        //* array diff array
         patchKeyedChildren(c1, c2, container, parentComponent, anchor)
       }
     }
@@ -162,6 +163,7 @@ export function createRenderer(options){
     return n1.type === n2.type && n1.key === n2.key
   }
 
+  //* diff
   function patchKeyedChildren(c1, c2, container, parentComponent, parentAnchor){
     let i = 0, e1 = c1.length - 1, e2 = c2.length - 1
 
@@ -310,7 +312,7 @@ export function createRenderer(options){
     //创建instance组件实例
     const instance = (initialVNode.component = createComponentInstance(initialVNode, parentComponent))
 
-    setupComponent(instance)
+    setupComponent(instance) //初始化 initProps initSlots
     setupRenderEffect(instance,initialVNode, container, anchor)
   }
 
@@ -319,6 +321,9 @@ export function createRenderer(options){
       if(!instance.isMounted){
         const { proxy } = instance
         const subTree = (instance.subTree = instance.render.call(proxy))
+        // 当这里的 subTree 为元素时，我终于明白了里面的props，children是哪来的，
+        //当时我们执行 instance.render = Component.render，然后执行const subTree = instance.render()
+        // 注意，这里是执行render函数，而render函数里面返回 h函数 的执行结果，可以去看下 h函数，它其实是传入了三个参数的，正好对应 type,props,children
     
         patch(null, subTree, container, instance, anchor)
         initialVNode.el = subTree.el

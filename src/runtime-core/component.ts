@@ -31,7 +31,7 @@ export function setupComponent(instance){
 function setupStatefulComponent(instance: any){
   const Component = instance.type
 
-  // 创建代理对象，this.msg 可以直接访问，但是setup返回的是一个对象，它并不直接在this上
+  //* 创建代理对象，this.msg 可以直接访问，但是setup返回的是一个对象，它并不直接在this上
   instance.proxy = new Proxy({_: instance}, PublicInstanceProxyHandlers)
   const { setup } = Component
   if(setup){

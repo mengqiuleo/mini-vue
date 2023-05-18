@@ -5,7 +5,7 @@ function createElement(type){
 
 }
 
-function patchProp(el, key, prevVal, nextVal){
+function patchProp(el, key, prevVal, nextVal){ //* 挂载事件，onClick
   const isOn = (key: string) => /^on[A-Z]/.test(key)
   if(isOn(key)){
     const event = key.slice(2).toLowerCase()
