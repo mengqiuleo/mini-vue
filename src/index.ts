@@ -5,6 +5,13 @@ import { baseCompile } from './compiler-core/src/compile'
 import * as runtimeDom from './runtime-dom/index'
 import { registerRuntimeCompiler } from './runtime-dom/index'
 
+import {
+  createApp,
+  h,
+  nextTick
+} from './runtime-dom/index'
+import { reactive, ref, computed, effect } from './reactivity/index'
+
 function compileToFunction(template) {
   const { code } = baseCompile(template)
 
@@ -14,3 +21,13 @@ function compileToFunction(template) {
 }
 
 registerRuntimeCompiler(compileToFunction)
+
+export const MiniVue = (window.MiniVue = {
+  createApp,
+  h,
+  nextTick,
+  reactive,
+  ref,
+  computed,
+  effect
+})
