@@ -23,3 +23,13 @@ yarn test codegen -u 更新快照内容
 
 ## html文件直接打开的跨域问题
 使用 live Server 打开
+
+
+## 关于 new Function
+前面任意多的参数都是参数，最后一个参数是函数体
+
+```js
+const sum = new Function('a','b','return a + b')
+
+console.log(sum(2,3)) // 5
+```
